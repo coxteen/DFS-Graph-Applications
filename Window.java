@@ -4,10 +4,16 @@ import java.awt.Graphics2D;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
+import java.util.ArrayList;
 
 public class Window extends JPanel implements MouseListener, MouseMotionListener {
 
-    private final RadioButton button = new RadioButton();
+    public static int windowHeight = 720;
+    public static int windowWidth = 1280;
+
+    private final Menu menu = new Menu();
+
+    private final ArrayList<RadioButton> buttons = menu.getRadioButtons();
 
     private final Graph graph = new Graph();
 
@@ -25,13 +31,21 @@ public class Window extends JPanel implements MouseListener, MouseMotionListener
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
         Graphics2D g2d = (Graphics2D) g;
-        Draw.draw(g2d, graph, button);
+        Draw.draw(g2d, graph, buttons);
     }
 
     private void left_click_action(MouseEvent e){
-        if (button.isClicked(e.getX(), e.getY())) {
-            button.switchGraphType();
-            return;
+        for (RadioButton button : buttons) {
+            if (button.isClicked(e.getX(), e.getY())) {
+                button.switchButtonState();
+                if (button == menu.getIsOrientedButton()) {
+                    graph.switchGraphType();
+                }
+                if (button == menu.getGtButton() && graph.selectedNode != null) {
+                    Traversals.genericTraversal(graph, graph.selectedNode);
+                }
+                return;
+            }
         }
         for (Node node : graph.nodes) {
             if (node.isClicked(e.getX(), e.getY())) {

@@ -2,6 +2,7 @@ import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.BasicStroke;
 import java.awt.Font;
+import java.util.ArrayList;
 
 public class Draw {
 
@@ -49,7 +50,7 @@ public class Draw {
     }
 
     private static void drawNumber(Graphics2D g2d, Node node) {
-        Font font = new Font(Node.font_name, Font.BOLD, node.fontSize);
+        Font font = new Font(Node.fontName, Font.BOLD, node.fontSize);
         g2d.setFont(font);
         g2d.setColor(Color.BLACK);
         if (node.value < 10) {
@@ -62,18 +63,25 @@ public class Draw {
 
     private static void drawButton(Graphics2D g2d, RadioButton button) {
         g2d.setStroke(new BasicStroke(button.strokeWidth));
-        g2d.drawOval(button.x - button.radius / 2, button.y - button.radius / 2, button.radius, button.radius);
+        g2d.drawOval(button.buttonX - button.radius / 2, button.buttonY - button.radius / 2, button.radius, button.radius);
 
         if (button.selected) {
             g2d.setColor(Color.BLACK);
-            g2d.fillOval(button.x - button.radius / 4, button.y - button.radius / 4, button.radius / 2, button.radius / 2);
+            g2d.fillOval(button.buttonX - button.radius / 4, button.buttonY - button.radius / 4, button.radius / 2, button.radius / 2);
         }
-        g2d.setFont(new Font(Node.font_name, Font.BOLD, 16));
+        g2d.setFont(new Font(button.labelFont, Font.BOLD, button.labelFontSize));
         g2d.setColor(Color.BLACK);
-        g2d.drawString("Orientat", 60, 38);
+        g2d.drawString(button.label, button.labelX, button.labelY);
     }
 
-    public static void draw(Graphics2D g2d, Graph graph, RadioButton button) {
+    private static void drawMenu(Graphics2D g2d) {
+        g2d.drawLine(
+                Menu.menuLeftLimit,0,
+                Menu.menuLeftLimit, Window.windowHeight
+        );
+    }
+
+    public static void draw(Graphics2D g2d, Graph graph, ArrayList<RadioButton> buttons) {
         for (Edge edge : graph.edges) {
             drawEdge(g2d, edge);
         }
@@ -81,6 +89,9 @@ public class Draw {
             drawNode(g2d, node, graph.selectedNode);
             drawNumber(g2d, node);
         }
-        drawButton(g2d, button);
+        for (RadioButton button : buttons) {
+            drawButton(g2d, button);
+        }
+        drawMenu(g2d);
     }
 }

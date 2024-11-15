@@ -3,14 +3,14 @@ import java.awt.Color;
 public class Node {
 
     public int x, y;
+    public int value;
     public static int radius = 60;
-    public Color nodeColor = Color.GREEN;
+
+    public Color nodeColor = Color.MAGENTA;
     public Color selectedNodeColor = Color.GRAY;
 
-    public int value;
-
     public int fontSize = radius / 2;
-    public static String font_name = "Arial";
+    public static String fontName = "Arial";
 
     public Node(int x, int y, int value) {
         this.x = x;

@@ -1,17 +1,23 @@
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class Graph {
 
-    public ArrayList<Node> nodes = new ArrayList<>();
-    public ArrayList<Edge> edges = new ArrayList<>();
+     public ArrayList<Node> nodes = new ArrayList<>();
+     public ArrayList<Edge> edges = new ArrayList<>();
 
-    public Node selectedNode = null;
+     public HashMap<Node, ArrayList<Node>> adjacentList = new HashMap<>();
 
-    public static boolean isOriented = false;
+     public Node selectedNode = null;
+
+     public static boolean isOriented = false;
 
     public Boolean isOverlapping(Node node) {
         for (Node list_node : nodes) {
             if(node != list_node && Math.abs(list_node.x - node.x) <= Node.radius && Math.abs(list_node.y - node.y) <= Node.radius) {
+                return true;
+            }
+            if(node.x <= Menu.menuLeftLimit + Node.radius / 2) {
                 return true;
             }
         }
@@ -36,5 +42,9 @@ public class Graph {
             }
         }
         edges.add(new Edge(start, end));
+    }
+
+    public void switchGraphType() {
+        isOriented = !isOriented;
     }
 }
