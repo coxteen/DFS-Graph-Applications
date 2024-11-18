@@ -1,16 +1,21 @@
 import java.awt.Color;
+import java.util.ArrayList;
 
 public class Node {
 
     public int x, y;
     public int value;
-    public static int radius = 60;
 
-    public Color nodeColor = Color.MAGENTA;
+    public ArrayList<Integer> values = new ArrayList<>();
+
+    public Color color = Color.MAGENTA;
     public Color selectedNodeColor = Color.GRAY;
 
-    public int fontSize = radius / 2;
-    public static String fontName = "Arial";
+    public int radius = 60;
+    public int fontSize = 30;
+
+    public Color defaultColor = Color.MAGENTA;
+    public String fontName = "Arial";
 
     public Node(int x, int y, int value) {
         this.x = x;

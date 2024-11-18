@@ -1,6 +1,5 @@
 import javax.swing.*;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
+import java.awt.*;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
@@ -34,6 +33,48 @@ public class Window extends JPanel implements MouseListener, MouseMotionListener
         Draw.draw(g2d, graph, buttons);
     }
 
+    public void applyAlgorithm(RadioButton button) {
+        Traversals traversals = new Traversals();
+
+        if (button == menu.getRelatedComponentsButton()) {
+            if (button.selected) {
+                traversals.paintRelatedComponents(traversals.relatedComponents(graph));
+            }
+            else {
+                traversals.resetGraphColors(graph);
+            }
+        }
+
+//        if (button == menu.getStrongRelatedComponentsButton()) {
+//            if (button.selected) {
+//                graph = traversals.strongRelatedComponents(graph);
+//            }
+//            else {
+//                graph = initialGraph;
+//            }
+//        }
+
+        if (button == menu.getFindRootButton()) {
+            if (!traversals.isTree(graph)) {
+                JOptionPane.showMessageDialog(
+                        null,
+                        "Graful nu este arbore!",
+                        "Error",
+                        JOptionPane.ERROR_MESSAGE
+                );
+            }
+            else {
+                Node root = traversals.findRoot(graph);
+                if (button.selected) {
+                    root.color = Color.RED;
+                }
+                else {
+                    root.color = root.defaultColor;
+                }
+            }
+        }
+    }
+
     private void left_click_action(MouseEvent e){
         for (RadioButton button : buttons) {
             if (button.isClicked(e.getX(), e.getY())) {
@@ -41,8 +82,8 @@ public class Window extends JPanel implements MouseListener, MouseMotionListener
                 if (button == menu.getIsOrientedButton()) {
                     graph.switchGraphType();
                 }
-                if (button == menu.getGtButton() && graph.selectedNode != null) {
-                    Traversals.genericTraversal(graph, graph.selectedNode);
+                else {
+                    applyAlgorithm(button);
                 }
                 return;
             }
@@ -66,6 +107,9 @@ public class Window extends JPanel implements MouseListener, MouseMotionListener
     public void mouseClicked(MouseEvent e) {
         if (e.getButton() == MouseEvent.BUTTON1) {
             left_click_action(e);
+        }
+        if (e.getButton() == MouseEvent.BUTTON3) {
+            graph.eraseNode(e.getX(), e.getY());
         }
         repaint();
     }
